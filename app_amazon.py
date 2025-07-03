@@ -15,7 +15,7 @@ LOGIN_PASS = "HunterKaylee100@"
 
 def create_driver():
     options = Options()
-    # options.add_argument("--headless=new")
+    options.add_argument("--headless=new")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--user-agent="
@@ -132,17 +132,19 @@ def insert_to_db(cursor, item):
 
 with open("output.json", "r") as file:
     urls = json.load(file)
-
+print(f"json urls : {len(urls)}")
 conn = connect_db()
 cursor = conn.cursor()
 
 batch_size = len(urls)//3
 urls = urls[:batch_size]
+print(len(urls))
 
 names = [item['name'] for item in urls]
 names = list(set(names))
-
+count = 0
 for i in range(0, len(names)):
+
     filtered_urls = [item for item in urls if item['name'] == names[i]]
     
     driver = create_driver()
@@ -150,6 +152,9 @@ for i in range(0, len(names)):
     login_counter = 0
 
     for url in filtered_urls:
+        print(count)
+        print(count+1)
+
         print("🔗 Scraping:", url['url'])
         result = scrape_url(driver, url['url'])
 
