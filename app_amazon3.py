@@ -94,7 +94,7 @@ def connect_db():
         port = 25060
     )
 
-def insert_to_db(cursor, item):
+def insert_to_db(cursor, item, location):
     try:
         cursor.execute("""
             INSERT INTO bstock_auctions (
@@ -117,7 +117,7 @@ def insert_to_db(cursor, item):
             item["title"],
             item["current_bit"],
             item["avergae_per_unit"],
-            item["address"],
+            location,
             item["close_in"],
             item["close_date"],
             item["minifest_url"],
@@ -156,7 +156,7 @@ for i in range(0, len(names)):
 
     for url in filtered_urls:
 
-
+        location = url['location']
         print("🔗 Scraping:", url['url'])
         result = scrape_url(driver, url['url'])
 
@@ -168,7 +168,7 @@ for i in range(0, len(names)):
             result = scrape_url(driver, url['url'])
 
         if result:
-            insert_to_db(cursor, result)
+            insert_to_db(cursor, result, location)
 
     driver.quit()
 

@@ -15,7 +15,7 @@ LOGIN_PASS = "HunterKaylee100@"
 
 def create_driver():
     options = Options()
-    options.add_argument("--headless=new")
+    # options.add_argument("--headless=new")
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--window-size=1920,1080")
     options.add_argument("--user-agent="
@@ -94,7 +94,7 @@ def connect_db():
         port = 25060
     )
 
-def insert_to_db(cursor, item):
+def insert_to_db(cursor, item, location):
     try:
         cursor.execute("""
             INSERT INTO bstock_auctions (
@@ -117,7 +117,7 @@ def insert_to_db(cursor, item):
             item["title"],
             item["current_bit"],
             item["avergae_per_unit"],
-            item["address"],
+            location,
             item["close_in"],
             item["close_date"],
             item["minifest_url"],
@@ -154,8 +154,9 @@ for i in range(0, len(names)):
     for url in filtered_urls:
         print(count)
         print(count+1)
-
+        
         print("🔗 Scraping:", url['url'])
+        location = url['location']
         result = scrape_url(driver, url['url'])
 
         if not result or result["title"] == "":
@@ -166,7 +167,7 @@ for i in range(0, len(names)):
             result = scrape_url(driver, url['url'])
 
         if result:
-            insert_to_db(cursor, result)
+            insert_to_db(cursor, result, location)
 
     driver.quit()
 

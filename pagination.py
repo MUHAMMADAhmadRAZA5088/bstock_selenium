@@ -16,10 +16,16 @@ for page in range(0, 1600, 160):
   if data['listings'] == []:
       break
   for url in data['listings']:
+        
         # if  'amazon/' in url['auctionUrl'] or 'bestbuy' in url['auctionUrl'] or 'walkeredison' in url['auctionUrl']:
         if '/buy/' not in url['auctionUrl'] and 'mobilecarrier' not in url['auctionUrl']:
             
-            urls.append({"name" : url['auctionUrl'].split('.com/')[1].split('/auction')[0] ,"url":url['auctionUrl']})
+            urls.append({
+                "name" : url['auctionUrl'].split('.com/')[1].split('/auction')[0] ,
+                "url":url['auctionUrl'],
+                'location' : url['region'],
+                'sallerlocationname' : url['sellerLocationName'],
+                })
 
 sorted_data = sorted(urls, key=lambda x: x['name'])
 
